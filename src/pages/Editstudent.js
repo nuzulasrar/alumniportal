@@ -18,7 +18,7 @@ function Editstudent() {
       axios
         .get(`https://nuzul.com.my/api/edit-students/${id}`)
         .then((res) => {
-            setCheckstudent(false);
+          setCheckstudent(false);
           //navigate users based on the response
 
           if (res.data.statusCode === 200) {
@@ -26,7 +26,7 @@ function Editstudent() {
             setCourse(res.data.student.course);
             setEmail(res.data.student.email);
             setPhone(res.data.student.phone);
-          } 
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -52,19 +52,39 @@ function Editstudent() {
               <form>
                 <div className="form-group mb-3">
                   <label htmlFor="">Student Name</label>
-                  <input type="text" name="name" value={name} className="form-control" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    className="form-control"
+                  />
                 </div>
                 <div className="form-group mb-3">
                   <label htmlFor="">Student Course</label>
-                  <input type="text" name="course" value={course} className="form-control" />
+                  <input
+                    type="text"
+                    name="course"
+                    value={course}
+                    className="form-control"
+                  />
                 </div>
                 <div className="form-group mb-3">
                   <label htmlFor="">Student Email</label>
-                  <input type="email" name="email" value={email} className="form-control" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={email}
+                    className="form-control"
+                  />
                 </div>
                 <div className="form-group mb-3">
                   <label htmlFor="">Student Phone</label>
-                  <input type="text" name="phone" value={phone} className="form-control" />
+                  <input
+                    type="text"
+                    name="phone"
+                    value={phone}
+                    className="form-control"
+                  />
                 </div>
                 <div className="form-group mb-3">
                   <button type="submit" className="btn btn-primary">

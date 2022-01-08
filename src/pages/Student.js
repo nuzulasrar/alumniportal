@@ -19,13 +19,10 @@ class Student extends Component {
     }
   }
 
-  
-
   render() {
-
     const style1 = {
-        borderRadius: 10,
-    }
+      borderRadius: 10,
+    };
 
     var student_HTMLTABLE = "";
 
@@ -58,22 +55,34 @@ class Student extends Component {
         return (
           <div className="row" key={item.id}>
             <div className="col-sm-1">
-              <div className="alert alert-primary shadow-lg" style={style1}>{item.id}</div>
+              <div className="alert alert-primary shadow-lg" style={style1}>
+                {item.id}
+              </div>
             </div>
             <div className="col-sm-3">
-              <div className="alert alert-primary shadow-lg" style={style1}>{item.name}</div>
+              <div className="alert alert-primary shadow-lg" style={style1}>
+                {item.name}
+              </div>
             </div>
             <div className="col-sm-2">
-              <div className="alert alert-primary shadow-lg" style={style1}>{item.course}</div>
+              <div className="alert alert-primary shadow-lg" style={style1}>
+                {item.course}
+              </div>
             </div>
             <div className="col-sm-2">
-              <div className="alert alert-primary shadow-lg" style={style1}>{item.email}</div>
+              <div className="alert alert-primary shadow-lg" style={style1}>
+                {item.email}
+              </div>
             </div>
             <div className="col-sm-2">
-              <div className="alert alert-primary shadow-lg" style={style1}>{item.phone}</div>
+              <div className="alert alert-primary shadow-lg" style={style1}>
+                {item.phone}
+              </div>
             </div>
             <div className="col-sm-2">
-              <Link to={`edit-student/${item.id}`} className="btn btn-success">Edit</Link>
+              <Link to={`edit-student/${item.id}`} className="btn btn-success">
+                Edit
+              </Link>
             </div>
           </div>
         );
@@ -81,28 +90,41 @@ class Student extends Component {
     }
 
     return (
-      <div className="container">
-        <div className="row" style={{height: 900}}>
-          <div className="col-sm-12">
-            <div className="card">
-              <div className="card-header">
-                <h4>
-                  Students Data
-                  <Link
-                    to={"add-student"}
-                    className="btn btn-primary btn-sm float-end"
-                  >
-                    Add Student
-                  </Link>
-                </h4>
-              </div>
-              <div className="card-body">
-                {student_HTMLTABLE}
+      <main id="main" class="main">
+        <div class="pagetitle">
+          <h1>Blank Page</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="index.html">Home</a>
+              </li>
+              <li class="breadcrumb-item">Pages</li>
+              <li class="breadcrumb-item active">Blank</li>
+            </ol>
+          </nav>
+        </div>
+
+        <section class="section">
+          <div className="row" style={{ height: 900 }}>
+            <div className="col-sm-12">
+              <div className="card">
+                <div className="card-header">
+                  <h4>
+                    Students Data
+                    <Link
+                      to={"add-student"}
+                      className="btn btn-primary btn-sm float-end"
+                    >
+                      Add Student
+                    </Link>
+                  </h4>
+                </div>
+                <div className="card-body">{student_HTMLTABLE}</div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 }
