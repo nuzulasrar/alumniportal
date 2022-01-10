@@ -6,7 +6,11 @@ import axios from "axios";
 const Dashboard = () => {
   const [checksession, setCheckSession] = useState(true);
   const [getdata, setGetData] = useState(true);
+  const [getsenaraipangkat, setGetSenaraiPangkat] = useState(true);
   const [idalumni, setIdalumni] = useState(0);
+
+  //array senarai pangkat
+  const [senaraipangkat, setSenaraiPangkat] = useState([]);
 
   //maklumat pelajar
   const [nama, setNama] = useState("");
@@ -77,6 +81,57 @@ const Dashboard = () => {
     if (getdata) fngetalumnidata();
   }, [getdata]);
 
+  const [a, b] = useState(false);
+
+  useEffect(() =>{
+    const fngetsenaraipangkat = async () =>{
+      const res = await axios.get("https://alumniportal.ucyp.edu.my/api/senaraipangkat")
+      
+      if(res.data.status == 200)
+      {
+        setSenaraiPangkat(res.data.senaraipangkat)
+        b(true)
+      }
+
+
+
+      console.log(res.data);
+    };
+    if(getsenaraipangkat) fngetsenaraipangkat()
+  }, [getsenaraipangkat]);
+
+  const [entah, setEntah] = useState();
+
+  useEffect(() =>{
+    const fn11 = async () =>{
+      // alert(JSON.stringify(senaraipangkat[1].label));
+
+      // entah = senaraipangkat.map((item) => {
+      //   return (
+      //     <li>{senaraipangkat.label}</li>
+      //   )
+      // })
+
+      
+    };
+    if(a) fn11()
+  }, [a]);
+
+  function Selectlist(props) {
+    const numbers = props.list;
+    return (
+      <select>
+        {numbers.map((number) =>
+          {
+            return (
+                  <option>{number.label}</option>
+                )
+        }
+        )}
+      </select>
+    );
+  }
+
   return (
     <div>
       {/* <Header /> */}
@@ -100,6 +155,7 @@ const Dashboard = () => {
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Profil</h5>
+                    <Selectlist list={senaraipangkat} />
                   <br />
                   <div className="row">
                     <div className="col-sm-6">
