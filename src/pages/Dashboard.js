@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
 
 const Dashboard = () => {
   const [checksession, setCheckSession] = useState(true);
@@ -11,6 +13,7 @@ const Dashboard = () => {
 
   //array senarai pangkat
   const [senaraipangkat, setSenaraiPangkat] = useState([]);
+  const [senaraipangkat2, setSenaraiPangkat2] = useState([]);
 
   //maklumat pelajar
   const [nama, setNama] = useState("");
@@ -83,54 +86,60 @@ const Dashboard = () => {
 
   const [a, b] = useState(false);
 
-  useEffect(() =>{
-    const fngetsenaraipangkat = async () =>{
-      const res = await axios.get("https://alumniportal.ucyp.edu.my/api/senaraipangkat")
-      
-      if(res.data.status == 200)
-      {
-        setSenaraiPangkat(res.data.senaraipangkat)
-        b(true)
-      }
+  useEffect(() => {
+    const fngetsenaraipangkat = async () => {
+      let sessiondata = sessionStorage.getItem("session");
+      sessionStorage.setItem("ok", "TWISTER FRIES");
 
-
+      const res = await axios
+        .post("https://alumniportal.ucyp.edu.my/api/senaraipangkat", {
+          idalumni: sessiondata,
+        })
+        .then((res) => {
+          if (res.data.status == 200) {
+            setSenaraiPangkat(res.data.senaraipangkat);
+            setSenaraiPangkat2(res.data.senaraipangkat[2]);
+            b(true);
+          }
+        });
 
       console.log(res.data);
     };
-    if(getsenaraipangkat) fngetsenaraipangkat()
+    if (getsenaraipangkat) fngetsenaraipangkat();
   }, [getsenaraipangkat]);
 
   const [entah, setEntah] = useState();
 
-  useEffect(() =>{
-    const fn11 = async () =>{
+  useEffect(() => {
+    const fn11 = async () => {
       // alert(JSON.stringify(senaraipangkat[1].label));
-
       // entah = senaraipangkat.map((item) => {
       //   return (
       //     <li>{senaraipangkat.label}</li>
       //   )
       // })
-
-      
     };
-    if(a) fn11()
+    if (a) fn11();
   }, [a]);
 
   function Selectlist(props) {
-    const numbers = props.list;
+    console.log(JSON.stringify(senaraipangkat2));
+    const listall = props.list;
     return (
-      <select>
-        {numbers.map((number) =>
-          {
-            return (
-                  <option>{number.label}</option>
-                )
-        }
-        )}
+      <select value={pangkat}>
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
       </select>
     );
   }
+
+  const animatedComponents = makeAnimated();
+
+  const defaultt = {
+    value: sessionStorage.getItem("ok"),
+    label: sessionStorage.getItem("ok"),
+  };
 
   return (
     <div>
@@ -155,7 +164,15 @@ const Dashboard = () => {
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Profil</h5>
-                    <Selectlist list={senaraipangkat} />
+                  <Select
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    options={senaraipangkat}
+                    defaultValue={defaultt}
+                    isSearchable
+                    isMulti
+                  />
+                  <Selectlist list={senaraipangkat} />
                   <br />
                   <div className="row">
                     <div className="col-sm-6">

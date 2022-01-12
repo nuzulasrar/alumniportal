@@ -27,6 +27,7 @@ const Login = () => {
           //   alert(response.data.session);
 
           sessionStorage.setItem("session", response.data.idalumnidata);
+          sessionStorage.setItem("defaultlist", 3);
           let sessiondata = sessionStorage.getItem("session");
           console.log("session sekarang adalah: " + sessiondata);
 
