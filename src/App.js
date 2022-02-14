@@ -27,12 +27,12 @@ function App() {
         <div class="copyright">
           &copy; Copyright{" "}
           <strong>
-            <span>NiceAdmin</span>
+            <span>Alumni Portal</span>
           </strong>
           . All Rights Reserved
         </div>
         <div class="credits">
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          Designed by <a>IT UCYP</a>
         </div>
       </footer>
 

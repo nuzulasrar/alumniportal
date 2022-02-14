@@ -30,6 +30,10 @@ const Dashboard = () => {
   const [nohp, setNohp] = useState("");
   const [sektor, setSektor] = useState("");
   const [sektorlevel, setSektorLevel] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [alumni_namasektor, setAlumniNamaSektor] = useState("");
+  const [caddress1, setCAddress1] = useState("");
+  const [caddress2, setCAddress2] = useState("");
 
   useEffect(() => {
     const getsessiondata = async () => {
@@ -79,6 +83,18 @@ const Dashboard = () => {
             setSektor(response.data.dataall.alumnidata.alumni_sektor);
             setSektorLevel(
               response.data.dataall.alumnidata.idkodsektorpekerjaan
+            );
+            setOccupation(
+              response.data.dataall.alumnidata.alumni_sektor
+            );
+            setAlumniNamaSektor(
+              response.data.dataall.alumnidata.alumni_namasektor
+            );
+            setCAddress1(
+              response.data.dataall.alumnidata.alumni_alamatsektor1
+            );
+            setCAddress2(
+              response.data.dataall.alumnidata.alumni_alamatsektor2
             );
 
             setGetData(false);
@@ -152,14 +168,13 @@ const Dashboard = () => {
       {/* <Header /> */}
       <main id="main" class="main">
         <div class="pagetitle">
-          <h1>Blank Page</h1>
+          <h1>Dashboard</h1>
           <nav>
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="index.html">Home</a>
               </li>
-              <li class="breadcrumb-item">Pages</li>
-              <li class="breadcrumb-item active">Blank</li>
+              <li class="breadcrumb-item active">Dashboard</li>
             </ol>
           </nav>
         </div>
@@ -344,7 +359,7 @@ const Dashboard = () => {
                         type="text"
                         class="form-control"
                         name="name"
-                        value={notel}
+                        value={occupation}
                         onChange={(e) => setNotel(e.target.value)}
                       />
                     </div>
@@ -354,7 +369,29 @@ const Dashboard = () => {
                         type="text"
                         class="form-control"
                         name="name"
-                        value={nohp}
+                        value={alumni_namasektor}
+                        onChange={(e) => setNohp(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label htmlFor="">Company Address (Line 1): </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={caddress1}
+                        onChange={(e) => setNotel(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-sm-6">
+                      <label htmlFor="">Company Address (Line 2): </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={caddress2}
                         onChange={(e) => setNohp(e.target.value)}
                       />
                     </div>
