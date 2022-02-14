@@ -34,6 +34,8 @@ const Dashboard = () => {
   const [alumni_namasektor, setAlumniNamaSektor] = useState("");
   const [caddress1, setCAddress1] = useState("");
   const [caddress2, setCAddress2] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [town, setTown] = useState("");
 
   useEffect(() => {
     const getsessiondata = async () => {
@@ -84,18 +86,14 @@ const Dashboard = () => {
             setSektorLevel(
               response.data.dataall.alumnidata.idkodsektorpekerjaan
             );
-            setOccupation(
-              response.data.dataall.alumnidata.alumni_sektor
-            );
+            setOccupation(response.data.dataall.alumnidata.alumni_sektor);
             setAlumniNamaSektor(
               response.data.dataall.alumnidata.alumni_namasektor
             );
-            setCAddress1(
-              response.data.dataall.alumnidata.alumni_alamatsektor1
-            );
-            setCAddress2(
-              response.data.dataall.alumnidata.alumni_alamatsektor2
-            );
+            setCAddress1(response.data.dataall.alumnidata.alumni_alamatsektor1);
+            setCAddress2(response.data.dataall.alumnidata.alumni_alamatsektor2);
+            setPostcode(response.data.dataall.alumnidata.alumni_poskodsektor);
+            setTown(response.data.dataall.alumnidata.alumni_bandarsektor);
 
             setGetData(false);
           } else {
@@ -376,7 +374,8 @@ const Dashboard = () => {
                   </div>
                   <div className="row">
                     <div className="col-sm-6">
-                      <label htmlFor="">Company Address (Line 1): </label> &nbsp;
+                      <label htmlFor="">Company Address (Line 1): </label>{" "}
+                      &nbsp;
                       <input
                         type="text"
                         class="form-control"
@@ -386,12 +385,35 @@ const Dashboard = () => {
                       />
                     </div>
                     <div className="col-sm-6">
-                      <label htmlFor="">Company Address (Line 2): </label> &nbsp;
+                      <label htmlFor="">Company Address (Line 2): </label>{" "}
+                      &nbsp;
                       <input
                         type="text"
                         class="form-control"
                         name="name"
                         value={caddress2}
+                        onChange={(e) => setNohp(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label htmlFor="">Postcode: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={postcode}
+                        onChange={(e) => setNotel(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-sm-6">
+                      <label htmlFor="">Town: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={town}
                         onChange={(e) => setNohp(e.target.value)}
                       />
                     </div>
