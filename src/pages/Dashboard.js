@@ -28,6 +28,8 @@ const Dashboard = () => {
   const [negara, setNegara] = useState("");
   const [notel, setNotel] = useState("");
   const [nohp, setNohp] = useState("");
+  const [sektor, setSektor] = useState("");
+  const [sektorlevel, setSektorLevel] = useState("");
 
   useEffect(() => {
     const getsessiondata = async () => {
@@ -74,6 +76,10 @@ const Dashboard = () => {
             );
             setNotel(response.data.dataall.alumnidata.alumni_notel);
             setNohp(response.data.dataall.alumnidata.alumni_nohp);
+            setSektor(response.data.dataall.alumnidata.alumni_sektor);
+            setSektorLevel(
+              response.data.dataall.alumnidata.idkodsektorpekerjaan
+            );
 
             setGetData(false);
           } else {
@@ -137,8 +143,8 @@ const Dashboard = () => {
   const animatedComponents = makeAnimated();
 
   const defaultt = {
-    value: sessionStorage.getItem("ok"),
-    label: sessionStorage.getItem("ok"),
+    value: sessionStorage.getItem("idpangkat"),
+    label: sessionStorage.getItem("idpangkat"),
   };
 
   return (
@@ -219,9 +225,10 @@ const Dashboard = () => {
                       />
                     </div>
                   </div>
+                  <h5 class="card-title mt-3">Alamat</h5>
                   <div className="row">
                     <div className="col-sm-6">
-                      <label htmlFor="">Alamat1: </label> &nbsp;
+                      <label htmlFor="">Alamat 1: </label> &nbsp;
                       <input
                         type="text"
                         class="form-control"
@@ -231,7 +238,7 @@ const Dashboard = () => {
                       />
                     </div>
                     <div className="col-sm-6">
-                      <label htmlFor="">Alamat2: </label> &nbsp;
+                      <label htmlFor="">Alamat 2: </label> &nbsp;
                       <input
                         type="text"
                         class="form-control"
@@ -298,6 +305,51 @@ const Dashboard = () => {
                     </div>
                     <div className="col-sm-6">
                       <label htmlFor="">No HP: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={nohp}
+                        onChange={(e) => setNohp(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <h5 class="card-title mt-3">Current Employment</h5>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label htmlFor="">Sector: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={sektor}
+                        onChange={(e) => setNotel(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-sm-6">
+                      <label htmlFor="">Level: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={sektorlevel}
+                        onChange={(e) => setNohp(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label htmlFor="">Occupation: </label> &nbsp;
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="name"
+                        value={notel}
+                        onChange={(e) => setNotel(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-sm-6">
+                      <label htmlFor="">Company: </label> &nbsp;
                       <input
                         type="text"
                         class="form-control"
