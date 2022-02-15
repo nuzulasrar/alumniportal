@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [senaraipangkat2, setSenaraiPangkat2] = useState([]);
 
   //maklumat pelajar
+  const [selectedImage, setSelectedImage] = useState("");
   const [nama, setNama] = useState("");
   const [gelaran, setGelaran] = useState("");
   const [pangkat, setPangkat] = useState("");
@@ -34,8 +35,10 @@ const Dashboard = () => {
   const [alumni_namasektor, setAlumniNamaSektor] = useState("");
   const [caddress1, setCAddress1] = useState("");
   const [caddress2, setCAddress2] = useState("");
-  const [postcode, setPostcode] = useState("");
-  const [town, setTown] = useState("");
+  const [cpostcode, setCPostcode] = useState("");
+  const [ctown, setCTown] = useState("");
+  const [cstate, setCState] = useState("");
+  const [ccountry, setCCountry] = useState("");
 
   useEffect(() => {
     const getsessiondata = async () => {
@@ -92,8 +95,10 @@ const Dashboard = () => {
             );
             setCAddress1(response.data.dataall.alumnidata.alumni_alamatsektor1);
             setCAddress2(response.data.dataall.alumnidata.alumni_alamatsektor2);
-            setPostcode(response.data.dataall.alumnidata.alumni_poskodsektor);
-            setTown(response.data.dataall.alumnidata.alumni_bandarsektor);
+            setCPostcode(response.data.dataall.alumnidata.alumni_poskodsektor);
+            setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
+            setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
+            setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
 
             setGetData(false);
           } else {
@@ -143,10 +148,10 @@ const Dashboard = () => {
   }, [a]);
 
   function Selectlist(props) {
-    console.log(JSON.stringify(senaraipangkat2));
+    // console.log(JSON.stringify(senaraipangkat2));
     const listall = props.list;
     return (
-      <select value={pangkat}>
+      <select value={pangkat} onChange={(event) => setPangkat(event.target.value)} className="form-control" name="gelaran">
         {listall.map((number) => {
           return <option value={number.value}>{number.label}</option>;
         })}
@@ -160,6 +165,31 @@ const Dashboard = () => {
     value: sessionStorage.getItem("idpangkat"),
     label: sessionStorage.getItem("idpangkat"),
   };
+
+  const onFileChange = (event) => {
+    setSelectedImage(event.target.files[0]);
+
+    const fd = new FormData();
+    fd.append('profilepic2', selectedImage);
+  }
+
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    
+    const idd = sessionStorage.getItem("session");
+
+    var form = document.forms.namedItem("fileinfo");
+
+    const fd = new FormData(form);
+    fd.append("profilepic", selectedImage);
+
+    // alert(JSON.stringify(fd.get('profilepic')));
+
+    axios.post("https://alumniportal.ucyp.edu.my/api/postform", fd, { 
+      headers: { "Content-Type": "multipart/form-data" }}).then((response) => {
+      alert(response.data.profilepic + " " + response.data.message);
+    });
+  }
 
   return (
     <div>
@@ -182,242 +212,277 @@ const Dashboard = () => {
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Profil</h5>
-                  <Select
+                  <form onSubmit={handlesubmit} action="post" enctype="multipart/form-data" name="fileinfo">
+                    <h5 class="card-title">Profile Picture</h5>
+                    {/* <Select
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     options={senaraipangkat}
                     defaultValue={defaultt}
                     isSearchable
                     isMulti
-                  />
-                  <Selectlist list={senaraipangkat} />
-                  <br />
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Gelaran: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="gelaran"
-                        value={gelaran}
-                        onChange={(e) => setGelaran(e.target.value)}
-                      />
+                  /> */}
+
+                    <br />
+                    <div className="row">
+                      <div className="col-sm-6">
+                      <label htmlFor="">Profile Picture: </label> &nbsp;
+                        <input
+                          type="file"
+                          name="profilepic"
+                          id="profilepic"
+                          className="form-control"
+                          onChange={onFileChange}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <img src="" />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Nama: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="pangkat"
-                        value={nama}
-                        onChange={(e) => setNama(e.target.value)}
-                      />
+                    <h5 class="card-title">Profil</h5>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Gelaran: </label> &nbsp;
+                        <Selectlist list={senaraipangkat} />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Nama: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nama"
+                          readOnly
+                          value={nama}
+                          onChange={(e) => setNama(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Pangkat: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="nokp"
-                        value={pangkat}
-                        nokp
-                        onChange={(e) => setPangkat(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Nombor KP: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nokp"
+                          readOnly
+                          value={nokp}
+                          onChange={(e) => setNokp(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Nombor KP: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={nokp}
-                        onChange={(e) => setNokp(e.target.value)}
-                      />
+                    <h5 class="card-title mt-3">Alamat</h5>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Alamat 1: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="alamat1"
+                          value={alamat1}
+                          onChange={(e) => setAlamat1(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Alamat 2: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="alamat2"
+                          value={alamat2}
+                          onChange={(e) => setAlamat2(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <h5 class="card-title mt-3">Alamat</h5>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Alamat 1: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={alamat1}
-                        onChange={(e) => setAlamat1(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Poskod: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="poskod"
+                          value={poskod}
+                          onChange={(e) => setPoskod(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Bandar: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="bandar"
+                          value={bandar}
+                          onChange={(e) => setBandar(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Alamat 2: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={alamat2}
-                        onChange={(e) => setAlamat2(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Negeri: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="negeri"
+                          value={negeri}
+                          onChange={(e) => setNegeri(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Negara: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="negara"
+                          value={negara}
+                          onChange={(e) => setNegara(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Poskod: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={poskod}
-                        onChange={(e) => setPoskod(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">No Telefon: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="notel"
+                          value={notel}
+                          onChange={(e) => setNotel(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">No HP: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="nohp"
+                          value={nohp}
+                          onChange={(e) => setNohp(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Bandar: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={bandar}
-                        onChange={(e) => setBandar(e.target.value)}
-                      />
+                    <h5 class="card-title mt-3">Current Employment</h5>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Sector: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="sektor"
+                          value={sektor}
+                          onChange={(e) => setSektor(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Level: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="sektorlevel"
+                          value={sektorlevel}
+                          onChange={(e) => setSektorLevel(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Negeri: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={negeri}
-                        onChange={(e) => setPoskod(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Occupation: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="occupation"
+                          value={occupation}
+                          onChange={(e) => setOccupation(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Company: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="alumni_namasektor"
+                          value={alumni_namasektor}
+                          onChange={(e) => setAlumniNamaSektor(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Negara: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={negara}
-                        onChange={(e) => setBandar(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Company Address (Line 1): </label>{" "}
+                        &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="caddress1"
+                          value={caddress1}
+                          onChange={(e) => setCAddress1(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Company Address (Line 2): </label>{" "}
+                        &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="caddress2"
+                          value={caddress2}
+                          onChange={(e) => setCAddress2(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">No Telefon: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={notel}
-                        onChange={(e) => setNotel(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Postcode: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="cpostcode"
+                          value={cpostcode}
+                          onChange={(e) => setCPostcode(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Town: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="ctown"
+                          value={ctown}
+                          onChange={(e) => setCTown(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">No HP: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={nohp}
-                        onChange={(e) => setNohp(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">State: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="cstate"
+                          value={cstate}
+                          onChange={(e) => setCState(e.target.value)}
+                        />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Country: </label> &nbsp;
+                        <input
+                          type="text"
+                          class="form-control"
+                          name="ccountry"
+                          value={ccountry}
+                          onChange={(e) => setCCountry(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <h5 class="card-title mt-3">Current Employment</h5>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Sector: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={sektor}
-                        onChange={(e) => setNotel(e.target.value)}
-                      />
+                    <div className="row">
+                      <div className="col-12 mt-3">
+                        <button
+                          type="submit"
+                          className="btn btn-primary float-end"
+                        >
+                          Save
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Level: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={sektorlevel}
-                        onChange={(e) => setNohp(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Occupation: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={occupation}
-                        onChange={(e) => setNotel(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Company: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={alumni_namasektor}
-                        onChange={(e) => setNohp(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Company Address (Line 1): </label>{" "}
-                      &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={caddress1}
-                        onChange={(e) => setNotel(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Company Address (Line 2): </label>{" "}
-                      &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={caddress2}
-                        onChange={(e) => setNohp(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label htmlFor="">Postcode: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={postcode}
-                        onChange={(e) => setNotel(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-sm-6">
-                      <label htmlFor="">Town: </label> &nbsp;
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="name"
-                        value={town}
-                        onChange={(e) => setNohp(e.target.value)}
-                      />
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
