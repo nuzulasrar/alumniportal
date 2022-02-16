@@ -14,6 +14,13 @@ const Dashboard = () => {
   //array senarai pangkat
   const [senaraipangkat, setSenaraiPangkat] = useState([]);
   const [senaraipangkat2, setSenaraiPangkat2] = useState([]);
+  const [senarainegeri, setSenaraiNegeri] = useState([]);
+  const [senarainegara, setSenaraiNegara] = useState([]);
+  const [senaraikodstatusalumnisektor, setSenaraiKodStatusAlumniSektor] =
+    useState([]);
+  const [senaraikodsektorpekerjaan, setSenaraiKodSektorPekerjaan] = useState(
+    []
+  );
 
   //maklumat pelajar
   const [selectedImage, setSelectedImage] = useState("");
@@ -85,7 +92,7 @@ const Dashboard = () => {
             );
             setNotel(response.data.dataall.alumnidata.alumni_notel);
             setNohp(response.data.dataall.alumnidata.alumni_nohp);
-            setSektor(response.data.dataall.alumnidata.alumni_sektor);
+            setSektor(response.data.dataall.alumnidata.idkodstatusalumnisektor);
             setSektorLevel(
               response.data.dataall.alumnidata.idkodsektorpekerjaan
             );
@@ -133,6 +140,21 @@ const Dashboard = () => {
     if (getsenaraipangkat) fngetsenaraipangkat();
   }, [getsenaraipangkat]);
 
+  useEffect(() => {
+    axios
+      .post("https://alumniportal.ucyp.edu.my/api/senarainegeri")
+      .then((res) => {
+        if (res.data.status === 200) {
+          setSenaraiNegeri(res.data.senarainegeri);
+          setSenaraiNegara(res.data.senarainegara);
+          setSenaraiKodStatusAlumniSektor(
+            res.data.senaraikodstatusalumnisektor
+          );
+          setSenaraiKodSektorPekerjaan(res.data.senaraikodsektorpekerjaan);
+        }
+      });
+  }, []);
+
   const [entah, setEntah] = useState();
 
   useEffect(() => {
@@ -151,7 +173,118 @@ const Dashboard = () => {
     // console.log(JSON.stringify(senaraipangkat2));
     const listall = props.list;
     return (
-      <select value={pangkat} onChange={(event) => setPangkat(event.target.value)} className="form-control" name="gelaran">
+      <select
+        value={pangkat}
+        onChange={(event) => setPangkat(event.target.value)}
+        className="form-select"
+        name="gelaran"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function Selectnegeri(props) {
+    // console.log(JSON.stringify(senaraipangkat2));
+
+    const listall = props.list;
+    return (
+      <select
+        value={negeri}
+        onChange={(event) => setNegeri(event.target.value)}
+        className="form-select"
+        name="negeri"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function Selectnegara(props) {
+    // console.log(JSON.stringify(senaraipangkat2));
+
+    const listall = props.list;
+    return (
+      <select
+        value={negara}
+        onChange={(event) => setNegara(event.target.value)}
+        className="form-select"
+        name="negara"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function SelectSektor(props) {
+    // console.log(JSON.stringify(senaraipangkat2));
+
+    const listall = props.list;
+    return (
+      <select
+        value={sektor}
+        onChange={(event) => setSektor(event.target.value)}
+        className="form-select"
+        name="sektor"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function SelectSektorLevel(props) {
+    const listall = props.list;
+    return (
+      <select
+        value={sektorlevel}
+        onChange={(event) => setSektorLevel(event.target.value)}
+        className="form-select"
+        name="sektorlevel"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function SelectnegeriC(props) {
+    // console.log(JSON.stringify(senaraipangkat2));
+
+    const listall = props.list;
+    return (
+      <select
+        value={cstate}
+        onChange={(event) => setNegeri(event.target.value)}
+        className="form-select"
+        name="cstate"
+      >
+        {listall.map((number) => {
+          return <option value={number.value}>{number.label}</option>;
+        })}
+      </select>
+    );
+  }
+
+  function SelectnegaraC(props) {
+    // console.log(JSON.stringify(senaraipangkat2));
+
+    const listall = props.list;
+    return (
+      <select
+        value={ccountry}
+        onChange={(event) => setNegara(event.target.value)}
+        className="form-select"
+        name="ccountry"
+      >
         {listall.map((number) => {
           return <option value={number.value}>{number.label}</option>;
         })}
@@ -170,12 +303,12 @@ const Dashboard = () => {
     setSelectedImage(event.target.files[0]);
 
     const fd = new FormData();
-    fd.append('profilepic2', selectedImage);
-  }
+    fd.append("profilepic2", selectedImage);
+  };
 
   const handlesubmit = (e) => {
     e.preventDefault();
-    
+
     const idd = sessionStorage.getItem("session");
 
     var form = document.forms.namedItem("fileinfo");
@@ -183,13 +316,26 @@ const Dashboard = () => {
     const fd = new FormData(form);
     fd.append("profilepic", selectedImage);
 
-    // alert(JSON.stringify(fd.get('profilepic')));
+    //alert(JSON.stringify(fd.getAll()));
 
-    axios.post("https://alumniportal.ucyp.edu.my/api/postform", fd, { 
-      headers: { "Content-Type": "multipart/form-data" }}).then((response) => {
-      alert(response.data.profilepic + " " + response.data.message);
-    });
-  }
+    // for (var pair of fd.entries()) {
+    //   console.log(pair[0] + ", " + pair[1]);
+    // }
+
+    axios
+      .post("https://alumniportal.ucyp.edu.my/api/postform", fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((response) => {
+        alert(
+          response.data.profilepic +
+            " " +
+            response.data.message +
+            " " +
+            response.data.nama
+        );
+      });
+  };
 
   return (
     <div>
@@ -212,7 +358,12 @@ const Dashboard = () => {
             <div class="col-lg-12">
               <div class="card">
                 <div class="card-body">
-                  <form onSubmit={handlesubmit} action="post" enctype="multipart/form-data" name="fileinfo">
+                  <form
+                    onSubmit={handlesubmit}
+                    action="post"
+                    enctype="multipart/form-data"
+                    name="fileinfo"
+                  >
                     <h5 class="card-title">Profile Picture</h5>
                     {/* <Select
                     closeMenuOnSelect={false}
@@ -226,13 +377,19 @@ const Dashboard = () => {
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                      <label htmlFor="">Profile Picture: </label> &nbsp;
+                        <div className="alert alert-warning">
+                          Picture file extension must be{" "}
+                          <b>.jpg, .jpeg, or .png only</b> and the size must be{" "}
+                          <b>below 2MB</b>.
+                        </div>
+                        <label htmlFor="">Profile Picture: </label> &nbsp;
                         <input
                           type="file"
                           name="profilepic"
                           id="profilepic"
                           className="form-control"
                           onChange={onFileChange}
+                          accept=".jpg,.jpeg,.png"
                         />
                       </div>
                       <div className="col-sm-6">
@@ -318,23 +475,11 @@ const Dashboard = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <label htmlFor="">Negeri: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="negeri"
-                          value={negeri}
-                          onChange={(e) => setNegeri(e.target.value)}
-                        />
+                        <Selectnegeri list={senarainegeri} />
                       </div>
                       <div className="col-sm-6">
                         <label htmlFor="">Negara: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="negara"
-                          value={negara}
-                          onChange={(e) => setNegara(e.target.value)}
-                        />
+                        <Selectnegara list={senarainegara} />
                       </div>
                     </div>
                     <div className="row">
@@ -363,23 +508,11 @@ const Dashboard = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <label htmlFor="">Sector: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="sektor"
-                          value={sektor}
-                          onChange={(e) => setSektor(e.target.value)}
-                        />
+                        <SelectSektor list={senaraikodstatusalumnisektor} />
                       </div>
                       <div className="col-sm-6">
                         <label htmlFor="">Level: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="sektorlevel"
-                          value={sektorlevel}
-                          onChange={(e) => setSektorLevel(e.target.value)}
-                        />
+                        <SelectSektorLevel list={senaraikodsektorpekerjaan} />
                       </div>
                     </div>
                     <div className="row">
@@ -453,23 +586,11 @@ const Dashboard = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <label htmlFor="">State: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="cstate"
-                          value={cstate}
-                          onChange={(e) => setCState(e.target.value)}
-                        />
+                        <SelectnegeriC list={senarainegeri} />
                       </div>
                       <div className="col-sm-6">
                         <label htmlFor="">Country: </label> &nbsp;
-                        <input
-                          type="text"
-                          class="form-control"
-                          name="ccountry"
-                          value={ccountry}
-                          onChange={(e) => setCCountry(e.target.value)}
-                        />
+                        <SelectnegaraC list={senarainegara} />
                       </div>
                     </div>
                     <div className="row">
