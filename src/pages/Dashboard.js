@@ -5,6 +5,7 @@ import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
+
 const Dashboard = () => {
   const [checksession, setCheckSession] = useState(true);
   const [getdata, setGetData] = useState(true);
@@ -46,6 +47,7 @@ const Dashboard = () => {
   const [ctown, setCTown] = useState("");
   const [cstate, setCState] = useState("");
   const [ccountry, setCCountry] = useState("");
+  const [gambar, setGambar] = useState("");
 
   useEffect(() => {
     const getsessiondata = async () => {
@@ -106,6 +108,7 @@ const Dashboard = () => {
             setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
             setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
             setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
+            setGambar(`https://alumniportal.ucyp.edu.my/api/image/${response.data.dataall.alumnidata.gambar}`);
 
             setGetData(false);
           } else {
@@ -315,6 +318,7 @@ const Dashboard = () => {
 
     const fd = new FormData(form);
     fd.append("profilepic", selectedImage);
+    fd.append("idalumnidata", idd);
 
     //alert(JSON.stringify(fd.getAll()));
 
@@ -327,13 +331,18 @@ const Dashboard = () => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
-        alert(
-          response.data.profilepic +
-            " " +
-            response.data.message +
-            " " +
-            response.data.nama
-        );
+        if(response.data.status === 200){
+          alert("Your profile is successfully updated!");
+          console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
+          setGambar(response.data.link);
+        }
+        else if(response.data.status === 201){
+          alert("Technical problem! Please Contact IT ADMIN.");
+          console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
+        }
+        else if(response.data.status === 202){
+          alert(response.data.errormessage);
+        }
       });
   };
 
@@ -377,6 +386,9 @@ const Dashboard = () => {
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
+                        <img src={gambar} width={300} />
+                      </div>
+                      <div className="col-sm-6">
                         <div className="alert alert-warning">
                           Picture file extension must be{" "}
                           <b>.jpg, .jpeg, or .png only</b> and the size must be{" "}
@@ -391,9 +403,6 @@ const Dashboard = () => {
                           onChange={onFileChange}
                           accept=".jpg,.jpeg,.png"
                         />
-                      </div>
-                      <div className="col-sm-6">
-                        <img src="" />
                       </div>
                     </div>
                     <h5 class="card-title">Profil</h5>
