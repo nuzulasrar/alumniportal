@@ -4,9 +4,13 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const Dashboard = () => {
+
+  const MySwal = withReactContent(Swal)
+
   const [checksession, setCheckSession] = useState(true);
   const [getdata, setGetData] = useState(true);
   const [getsenaraipangkat, setGetSenaraiPangkat] = useState(true);
@@ -49,6 +53,8 @@ const Dashboard = () => {
   const [ccountry, setCCountry] = useState("");
   const [gambar, setGambar] = useState("");
 
+  const [changes, setChanges] = useState(0);
+
   useEffect(() => {
     const getsessiondata = async () => {
       let sessiondata = sessionStorage.getItem("session");
@@ -58,7 +64,14 @@ const Dashboard = () => {
       if (sessiondata != null) {
         // window.location.href = "/students";
         setIdalumni(sessiondata);
-        console.log(`id alumni:  ${idalumni}`);
+        // console.log(`id alumni:  ${idalumni}`);
+        Swal.fire({
+          position: 'top',
+          icon: 'success',
+          title: 'You have successfully logged in!',
+          showConfirmButton: false,
+          timer: 1500
+        })
       } else {
         window.location.href = "/login";
       }
@@ -72,7 +85,7 @@ const Dashboard = () => {
     const fngetalumnidata = async () => {
       let sessiondata = sessionStorage.getItem("session");
       axios
-        .post("https://alumniportal.ucyp.edu.my/api/getalumnidata", {
+        .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/getalumnidata", {
           idalumni: sessiondata,
         })
         .then((response) => {
@@ -108,7 +121,7 @@ const Dashboard = () => {
             setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
             setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
             setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
-            setGambar(`https://alumniportal.ucyp.edu.my/api/image/${response.data.dataall.alumnidata.gambar}`);
+            setGambar(`https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/image/${response.data.dataall.alumnidata.gambar}`);
 
             setGetData(false);
           } else {
@@ -127,7 +140,7 @@ const Dashboard = () => {
       sessionStorage.setItem("ok", "TWISTER FRIES");
 
       const res = await axios
-        .post("https://alumniportal.ucyp.edu.my/api/senaraipangkat", {
+        .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senaraipangkat", {
           idalumni: sessiondata,
         })
         .then((res) => {
@@ -145,7 +158,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .post("https://alumniportal.ucyp.edu.my/api/senarainegeri")
+      .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senarainegeri")
       .then((res) => {
         if (res.data.status === 200) {
           setSenaraiNegeri(res.data.senarainegeri);
@@ -177,8 +190,8 @@ const Dashboard = () => {
     const listall = props.list;
     return (
       <select
-        value={pangkat}
-        onChange={(event) => setPangkat(event.target.value)}
+        value={gelaran}
+        onChange={(event) => setGelaran(event.target.value)}
         className="form-select"
         name="gelaran"
       >
@@ -327,21 +340,38 @@ const Dashboard = () => {
     // }
 
     axios
-      .post("https://alumniportal.ucyp.edu.my/api/postform", fd, {
+      .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/postform", fd, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
         if(response.data.status === 200){
-          alert("Your profile is successfully updated!");
+          Swal.fire(
+            'Saved!',
+            'Your profile is successfully updated!',
+            'success'
+          )
+          // alert("Your profile is successfully updated!");
           console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
-          setGambar(response.data.link);
+          
+          setChanges(0);
+
+          if(response.data.statusgambar === 1){
+            setGambar(response.data.link);
+          }
         }
         else if(response.data.status === 201){
-          alert("Technical problem! Please Contact IT ADMIN.");
+          Swal.fire(
+            'Oops!',
+            'Technical problem! Please Contact IT ADMIN.',
+            'error'
+          )
+          // alert("Technical problem! Please Contact IT ADMIN.");
           console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
+          setChanges(0);
         }
         else if(response.data.status === 202){
           alert(response.data.errormessage);
+          setChanges(0);
         }
       });
   };

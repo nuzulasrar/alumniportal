@@ -8,6 +8,7 @@ import Editstudent from "./pages/Editstudent";
 import Dashboard from "./pages/Dashboard";
 import Header from "./pages/Header";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Logout from "./pages/Logout";
 import Form from "./pages/Form";
 
@@ -21,6 +22,7 @@ function App() {
         <Route path={"/edit-student/:id"} element={<Editstudent />} />
         <Route path={"/dashboard"} element={<Dashboard />} />
         <Route path={"/login"} element={<Login />} />
+        <Route path={"/register"} element={<Register />} />
         <Route path={"/logout"} element={<Logout />} />
         <Route path={"/form"} element={<Form />} />
         <Route path={"*"} element={<Login />} />

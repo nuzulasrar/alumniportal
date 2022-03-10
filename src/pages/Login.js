@@ -2,12 +2,12 @@ import React, { Component, useState } from "react";
 import axios from "axios";
 import { Navigate, Link } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const Login = () => {
-  //   state = {
-  //     username: "",
-  //     password: "",
-  //   };
+  
+  const MySwal = withReactContent(Swal)
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ const Login = () => {
     event.preventDefault();
     // alert(`The name you entered was: ${username} and ${password}`);
     axios
-      .post("https://alumniportal.ucyp.edu.my/api/login2", {
+      .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/login2", {
         username: username,
         password: password,
       })
@@ -35,7 +35,12 @@ const Login = () => {
           //     "/dashboard?idalumni=" + response.data.idalumnidata;
           setRedirect(true);
         } else {
-          alert("oops");
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Username or password incorrect!',
+            footer: '<a href="register">Have you registered an account?</a>'
+          })
         }
       });
   };
@@ -63,7 +68,7 @@ const Login = () => {
               <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                 <div class="d-flex justify-content-center py-4">
                   <div class="logo d-flex align-items-center w-auto">
-                    <img src="assets/img/logo.png" alt="" />
+                    <img src="https://ekiba.ucyp.edu.my/images/kyplogo.png" alt="" />
                     <span class="d-none d-lg-block">Alumni Portal</span>
                   </div>
                 </div>
@@ -130,14 +135,13 @@ const Login = () => {
                         </div>
                       </div>
                       <div class="col-12">
-                        <button class="btn btn-primary w-100" type="submit">
+                        <button class="btn btn-danger w-100" type="submit">
                           Login
                         </button>
                       </div>
                       <div class="col-12">
                         <p class="small mb-0">
-                          Don't have account?
-                          <Link to={"/students"}>asdasdasd</Link>
+                          Don't have account? <Link to={"/register"}>Register</Link>
                         </p>
                       </div>
                     </form>
