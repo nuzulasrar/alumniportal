@@ -2,12 +2,11 @@ import React, { Component, useState } from "react";
 import axios from "axios";
 import { Navigate, Link } from "react-router-dom";
 import { useEffect } from "react/cjs/react.development";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const Register = () => {
-  
-  const MySwal = withReactContent(Swal)
+  const MySwal = withReactContent(Swal);
 
   const [ic, setIC] = useState("");
   const [username, setUsername] = useState("");
@@ -21,8 +20,8 @@ const Register = () => {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setInputs(values => ({...values, [name]: value}))
-  }
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,20 +31,18 @@ const Register = () => {
 
     const fd = new FormData(form);
 
-    if(inputs.password != inputs.password2)
-    {
-      
+    if (inputs.password != inputs.password2) {
       MySwal.fire({
         title: <p>Hello World</p>,
-        footer: 'Copyright 2018',
+        footer: "Copyright 2018",
         didOpen: () => {
           // `MySwal` is a subclass of `Swal`
           //   with all the same instance & static methods
-          MySwal.clickConfirm()
-        }
+          MySwal.clickConfirm();
+        },
       }).then(() => {
-        return MySwal.fire(<p>Please make sure both passwords match!</p>)
-      })
+        return MySwal.fire(<p>Please make sure both passwords match!</p>);
+      });
     } else {
       axios.post(
         "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/register",
@@ -53,8 +50,6 @@ const Register = () => {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
     }
-
-    
   };
 
   if (redirect == true) {
@@ -103,7 +98,7 @@ const Register = () => {
                             name="ic"
                             class="form-control"
                             id="ic"
-                            value={inputs.ic || ""} 
+                            value={inputs.ic || ""}
                             onChange={handleChange}
                             required
                           />
@@ -125,7 +120,7 @@ const Register = () => {
                             name="username"
                             class="form-control"
                             id="yourUsername"
-                            value={inputs.username || ""} 
+                            value={inputs.username || ""}
                             onChange={handleChange}
                             required
                           />
@@ -147,7 +142,7 @@ const Register = () => {
                             name="email"
                             class="form-control"
                             id="yourUsername"
-                            value={inputs.email || ""} 
+                            value={inputs.email || ""}
                             onChange={handleChange}
                             required
                           />
@@ -172,7 +167,7 @@ const Register = () => {
                             id="yourPassword"
                             // onChange={this.handleInput}
                             // value={this.state.password}
-                            value={inputs.password || ""} 
+                            value={inputs.password || ""}
                             onChange={handleChange}
                             required
                           />
@@ -196,7 +191,7 @@ const Register = () => {
                             id="password2"
                             // onChange={this.handleInput}
                             // value={this.state.password}
-                            value={inputs.password2 || ""} 
+                            value={inputs.password2 || ""}
                             onChange={handleChange}
                             required
                           />

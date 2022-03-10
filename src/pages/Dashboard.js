@@ -4,12 +4,11 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 const Dashboard = () => {
-
-  const MySwal = withReactContent(Swal)
+  const MySwal = withReactContent(Swal);
 
   const [checksession, setCheckSession] = useState(true);
   const [getdata, setGetData] = useState(true);
@@ -66,12 +65,12 @@ const Dashboard = () => {
         setIdalumni(sessiondata);
         // console.log(`id alumni:  ${idalumni}`);
         Swal.fire({
-          position: 'top',
-          icon: 'success',
-          title: 'You have successfully logged in!',
+          position: "top",
+          icon: "success",
+          title: "You have successfully logged in!",
           showConfirmButton: false,
-          timer: 1500
-        })
+          timer: 1500,
+        });
       } else {
         window.location.href = "/login";
       }
@@ -85,9 +84,12 @@ const Dashboard = () => {
     const fngetalumnidata = async () => {
       let sessiondata = sessionStorage.getItem("session");
       axios
-        .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/getalumnidata", {
-          idalumni: sessiondata,
-        })
+        .post(
+          "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/getalumnidata",
+          {
+            idalumni: sessiondata,
+          }
+        )
         .then((response) => {
           if (response.data.status == 200) {
             //alert(response.data.dataall.alumnidata.alumni_nama);
@@ -121,7 +123,9 @@ const Dashboard = () => {
             setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
             setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
             setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
-            setGambar(`https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/image/${response.data.dataall.alumnidata.gambar}`);
+            setGambar(
+              `https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/image/${response.data.dataall.alumnidata.gambar}`
+            );
 
             setGetData(false);
           } else {
@@ -140,9 +144,12 @@ const Dashboard = () => {
       sessionStorage.setItem("ok", "TWISTER FRIES");
 
       const res = await axios
-        .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senaraipangkat", {
-          idalumni: sessiondata,
-        })
+        .post(
+          "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senaraipangkat",
+          {
+            idalumni: sessiondata,
+          }
+        )
         .then((res) => {
           if (res.data.status == 200) {
             setSenaraiPangkat(res.data.senaraipangkat);
@@ -158,7 +165,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senarainegeri")
+      .post(
+        "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/senarainegeri"
+      )
       .then((res) => {
         if (res.data.status === 200) {
           setSenaraiNegeri(res.data.senarainegeri);
@@ -340,37 +349,46 @@ const Dashboard = () => {
     // }
 
     axios
-      .post("https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/postform", fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      .post(
+        "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/postform",
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      )
       .then((response) => {
-        if(response.data.status === 200){
+        if (response.data.status === 200) {
           Swal.fire(
-            'Saved!',
-            'Your profile is successfully updated!',
-            'success'
-          )
+            "Saved!",
+            "Your profile is successfully updated!",
+            "success"
+          );
           // alert("Your profile is successfully updated!");
-          console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
-          
+          console.log(
+            `gambar : ${response.data.gambar}, link: ${response.data.link}`
+          );
+
           setChanges(0);
 
-          if(response.data.statusgambar === 1){
+          if (response.data.statusgambar === 1) {
             setGambar(response.data.link);
           }
-        }
-        else if(response.data.status === 201){
+        } else if (response.data.status === 201) {
           Swal.fire(
-            'Oops!',
-            'Technical problem! Please Contact IT ADMIN.',
-            'error'
-          )
+            "Oops!",
+            "Technical problem! Please Contact IT ADMIN.",
+            "error"
+          );
           // alert("Technical problem! Please Contact IT ADMIN.");
-          console.log(`gambar : ${response.data.gambar}, link: ${response.data.link}`);
+          console.log(
+            `gambar : ${response.data.gambar}, link: ${response.data.link}`
+          );
           setChanges(0);
-        }
-        else if(response.data.status === 202){
+        } else if (response.data.status === 202) {
           alert(response.data.errormessage);
+          setChanges(0);
+        } else if (response.data.status === 0) {
+          Swal.fire("Oops!", "You have not made any changes!", "warning");
           setChanges(0);
         }
       });
