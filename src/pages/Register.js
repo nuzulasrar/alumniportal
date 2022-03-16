@@ -48,7 +48,35 @@ const Register = () => {
         "https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/register",
         fd,
         { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      ).then((res) => {
+        if (res.data.existalumni == 1 && res.data.existakaun == 1) {
+          Swal.fire({
+            icon: "info",
+            title: "You have aready registered an alumni account before! Please log in instead.",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+        } else if (res.data.existalumni == 1 && res.data.existakaun == 0) {
+          if (res.data.accountcreated == 1) {
+            Swal.fire({
+              icon: "success",
+              title: "You have successfully registered your alumni account! You may now log in.",
+              showConfirmButton: false,
+              timer: 3000,
+            });
+          } else {
+
+          }
+
+        } else if (res.data.existalumni == 0) {
+          Swal.fire({
+            icon: "error",
+            title: "Your IC number does not exist in the system yet. Please contact alumni staff if you are a UCYP alumni. Thank You.",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+        }
+      });
     }
   };
 

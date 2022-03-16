@@ -50,6 +50,9 @@ const Dashboard = () => {
   const [ctown, setCTown] = useState("");
   const [cstate, setCState] = useState("");
   const [ccountry, setCCountry] = useState("");
+  const [school, setSchool] = useState("");
+  const [program, setProgram] = useState("");
+  const [salary, setSalary] = useState("");
   const [gambar, setGambar] = useState("");
 
   const [changes, setChanges] = useState(0);
@@ -123,6 +126,9 @@ const Dashboard = () => {
             setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
             setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
             setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
+            setSchool(response.data.dataall.sekolah.sekolah);
+            setProgram(response.data.dataall.kursus.kursus);
+            setSalary(response.data.dataall.alumnidata.gaji);
             setGambar(
               `https://smarthelpersystem.ucyp.edu.my/alumniportal/public/api/image/${response.data.dataall.alumnidata.gambar}`
             );
@@ -563,6 +569,12 @@ const Dashboard = () => {
                     </div>
                     <h5 class="card-title mt-3">Current Employment</h5>
                     <div className="row">
+                      <div className="col-sm-12">
+                        <label htmlFor="">Salary (RM): </label> &nbsp;
+                        <input type="number" name="salary" className="form-control" value={salary} onChange={(e) => setSalary(e.target.value)} />
+                      </div>
+                    </div>
+                    <div className="row">
                       <div className="col-sm-6">
                         <label htmlFor="">Sector: </label> &nbsp;
                         <SelectSektor list={senaraikodstatusalumnisektor} />
@@ -648,6 +660,17 @@ const Dashboard = () => {
                       <div className="col-sm-6">
                         <label htmlFor="">Country: </label> &nbsp;
                         <SelectnegaraC list={senarainegara} />
+                      </div>
+                    </div>
+                    <h5 class="card-title mt-3">Academic</h5>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Faculty: </label> &nbsp;
+                        <input type="text" class="form-control" name="school" value={school} readOnly />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Program: </label> &nbsp;
+                        <input type="text" class="form-control" name="program" value={program} readOnly />
                       </div>
                     </div>
                     <div className="row">
