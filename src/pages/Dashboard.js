@@ -294,7 +294,7 @@ const Dashboard = () => {
     return (
       <select
         value={cstate}
-        onChange={(event) => setNegeri(event.target.value)}
+        onChange={(event) => setCState(event.target.value)}
         className="form-select"
         name="cstate"
       >
@@ -312,7 +312,7 @@ const Dashboard = () => {
     return (
       <select
         value={ccountry}
-        onChange={(event) => setNegara(event.target.value)}
+        onChange={(event) => setCCountry(event.target.value)}
         className="form-select"
         name="ccountry"
       >
