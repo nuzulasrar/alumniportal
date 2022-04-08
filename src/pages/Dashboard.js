@@ -50,6 +50,10 @@ const Dashboard = () => {
   const [ctown, setCTown] = useState("");
   const [cstate, setCState] = useState("");
   const [ccountry, setCCountry] = useState("");
+  const [cpersonname, setCPersonName] = useState("");
+  const [cpersonposition, setCPersonPosition] = useState("");
+  const [cpersonemail, setCPersonEmail] = useState("");
+  const [cpersonphone, setCPersonPhone] = useState("");
   const [school, setSchool] = useState("");
   const [program, setProgram] = useState("");
   const [salary, setSalary] = useState("");
@@ -63,7 +67,7 @@ const Dashboard = () => {
 
       console.log(sessiondata);
 
-      if (sessiondata != null) {
+      if(sessiondata != null) {
         // window.location.href = "/students";
         setIdalumni(sessiondata);
         // console.log(`id alumni:  ${idalumni}`);
@@ -126,6 +130,10 @@ const Dashboard = () => {
             setCTown(response.data.dataall.alumnidata.alumni_bandarsektor);
             setCState(response.data.dataall.alumnidata.idkodnegeri_pekerjaan);
             setCCountry(response.data.dataall.alumnidata.idkodnegara_pekerjaan);
+            setCPersonName(response.data.dataall.alumnidata.work_contactperson_name);
+            setCPersonPosition(response.data.dataall.alumnidata.work_contactperson_position);
+            setCPersonEmail(response.data.dataall.alumnidata.work_contactperson_email);
+            setCPersonPhone(response.data.dataall.alumnidata.work_contactperson_phoneno);
             setSchool(response.data.dataall.sekolah.sekolah);
             setProgram(response.data.dataall.kursus.kursus);
             setSalary(response.data.dataall.alumnidata.gaji);
@@ -162,9 +170,10 @@ const Dashboard = () => {
             setSenaraiPangkat2(res.data.senaraipangkat[2]);
             b(true);
           }
+          // console.log(res.data);
         });
 
-      console.log(res.data);
+      
     };
     if (getsenaraipangkat) fngetsenaraipangkat();
   }, [getsenaraipangkat]);
@@ -660,6 +669,27 @@ const Dashboard = () => {
                       <div className="col-sm-6">
                         <label htmlFor="">Country: </label> &nbsp;
                         <SelectnegaraC list={senarainegara} />
+                      </div>
+                    </div>
+                    <h5 class="card-title mt-3">Current Employment - Contact Person</h5>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Contact Person Name (Supervisor / Superior): </label> &nbsp;
+                        <input type="text" name="cpersonname" className="form-control" value={cpersonname} onChange={(e) => setCPersonName(e.target.value)} />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Contact Person Position: </label> &nbsp;
+                        <input type="text" name="cpersonposition" className="form-control" value={cpersonposition} onChange={(e) => setCPersonPosition(e.target.value)} />
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <label htmlFor="">Contact Person Email: </label> &nbsp;
+                        <input type="text" name="cpersonemail" className="form-control" value={cpersonemail} onChange={(e) => setCPersonEmail(e.target.value)} />
+                      </div>
+                      <div className="col-sm-6">
+                        <label htmlFor="">Contact Person Phone Number: </label> &nbsp;
+                        <input type="number" name="cpersonphoneno" className="form-control" value={cpersonphone} onChange={(e) => setCPersonPhone(e.target.value)} />
                       </div>
                     </div>
                     <h5 class="card-title mt-3">Academic</h5>

@@ -14,7 +14,7 @@ import Form from "./pages/Form";
 
 function App() {
   return (
-    <BrowserRouter basename="/alumni">
+    <BrowserRouter basename="/">
       <Routes>
         <Route exact path={"/"} element={<Home />} />
         <Route path={"/students"} element={<Student />} />
